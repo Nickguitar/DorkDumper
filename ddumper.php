@@ -33,9 +33,11 @@ if($argc !== 4){
 	}else{
 		die("\e[31m[-] No vulnerable website was found.\033[0m\r\n");
 	}
-	
-	$vulns = isVuln($arr);
-	
+	try{
+		$vulns = isVuln($arr);
+	}catch (Exception $e) {
+    		echo 'Error: ',  $e->getMessage(), "\n";
+	}
 	
 	foreach($vulns as $link){
 		$fp = fopen($file, "a");
