@@ -19,36 +19,34 @@ if($argc !== 4){
    
   ");
 }else{
-	$dork = $argv[1];
-	$pages = (int)$argv[2];
-	$file = $argv[3];
-	
-	if($pages==0){
-		echo("\e[31m[-] Error: <pages> must be a positive integer.\033[0m\r\n");
-		die("ex: php ddumper.php item.php?id= 20 urls.txt\r\n");
-	}
-	$arr = scan("pagina.php?id=", $pages, $file);
-	if(count($arr) > 0){
-		echo "~Potentially vulnerable websites: ".count($arr)."\r\n";
-	}else{
-		die("\e[31m[-] No vulnerable website was found.\033[0m\r\n");
-	}
 	try{
+		$dork = $argv[1];
+		$pages = (int)$argv[2];
+		$file = $argv[3];
+
+		if($pages==0){
+			echo("\e[31m[-] Error: <pages> must be a positive integer.\033[0m\r\n");
+			die("ex: php ddumper.php item.php?id= 20 urls.txt\r\n");
+		}
+		$arr = scan("pagina.php?id=", $pages, $file);
+		if(count($arr) > 0){
+			echo "~Potentially vulnerable websites: ".count($arr)."\r\n";
+		}else{
+			die("\e[31m[-] No vulnerable website was found.\033[0m\r\n");
+		}
 		$vulns = isVuln($arr);
+		foreach($vulns as $link){
+			$fp = fopen($file, "a");
+			$fw = fwrite($fp, $link."\r\n");
+		}
+		if($fw){
+			echo "\r\n\e[32m[+]\033[0m Dumping completed. URLs were saved on ".$file."\r\n";
+		}else{
+			echo "\r\n\e[31m[-]\033[0m Could not save the file.\r\n";
+		}
 	}catch (Exception $e) {
     		echo 'Error: ',  $e->getMessage(), "\n";
 	}
-	
-	foreach($vulns as $link){
-		$fp = fopen($file, "a");
-		$fw = fwrite($fp, $link."\r\n");
-	}
-	if($fw){
-		echo "\r\n\e[32m[+]\033[0m Dumping completed. URLs were saved on ".$file."\r\n";
-	}else{
-		echo "\r\n\e[31m[-]\033[0m Could not save the file.\r\n";
-	}
-	
 }
 
 
