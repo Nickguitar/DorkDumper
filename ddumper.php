@@ -6,7 +6,7 @@ if(PHP_SAPI != "cli"){
 	die("Run me on commandline plz.");
 }
 
-error_reporting(0);
+//error_reporting(0);
 banner();
 if($argc !== 4){
 	die("
